@@ -1,0 +1,58 @@
+# Rommelmarkt Zoeker Configuration
+# Adjust these settings to control scraping behavior
+
+scraping:
+  # Delay between requests in seconds (be respectful to the server)
+  delay_seconds: 2.5
+
+  # Number of retry attempts for failed requests
+  max_retries: 3
+
+  # Delay between retries in seconds
+  retry_delay_seconds: 5
+
+  # User agent string (include contact info for transparency)
+  user_agent: "RommelmarktZoeker/1.0 (educational project)"
+
+  # Request timeout in seconds
+  timeout_seconds: 30
+
+target:
+  # Base URL of the target website
+  base_url: "https://www.rommelmarkten.be"
+
+  # Flemish provinces to scrape (Dutch names as used in URLs)
+  provinces:
+    - antwerpen
+    - limburg
+    - oost-vlaanderen
+    - vlaams-brabant
+    - west-vlaanderen
+
+  # Month selection strategy:
+  # - "current": only current month
+  # - "next_3": current month + next 3 months
+  # - "next_6": current month + next 6 months
+  # - "all": all 12 months
+  # - Or specify explicit list under 'months' key
+  month_selection: "next_3"
+
+  # Explicit month list (used if month_selection is not set)
+  # months:
+  #   - januari
+  #   - februari
+  #   - maart
+
+storage:
+  # Path to SQLite database file
+  database_path: "data/rommelmarkten.db"
+
+  # Path for JSON exports
+  json_export_path: "data/exports"
+
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR
+  level: "INFO"
+
+  # Log file path (leave empty to disable file logging)
+  file: "logs/scraper.log"
