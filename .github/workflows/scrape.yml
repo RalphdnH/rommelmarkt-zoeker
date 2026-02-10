@@ -2,13 +2,16 @@ name: Scrape Rommelmarkten
 
 on:
   schedule:
-    # Run daily at midnight (UTC)
+    # Run daily at midnight (UTC) = 1:00 AM Belgian time
     - cron: '0 0 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Required for pushing commits
 
     steps:
       - name: Checkout repository
@@ -34,11 +37,13 @@ jobs:
             data/exports/*.json
           retention-days: 30
 
-      - name: Commit updated data (optional)
+      - name: Commit updated data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add data/
+          # Force add data files even if in .gitignore
+          git add -f data/rommelmarkten.db
+          git add -f data/exports/*.json
           git diff --staged --quiet || git commit -m "Update rommelmarkt data [skip ci]"
           git push
         env:
