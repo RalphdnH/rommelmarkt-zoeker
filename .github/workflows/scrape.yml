@@ -28,6 +28,13 @@ jobs:
       - name: Run scraper
         run: python main.py --export-json
 
+      - name: Create latest.json for mobile app
+        run: |
+          cd data/exports
+          # Copy the most recent export to latest.json
+          cp $(ls -t rommelmarkten_*.json | head -1) latest.json
+          echo "Created latest.json from $(ls -t rommelmarkten_*.json | head -1)"
+
       - name: Upload database artifact
         uses: actions/upload-artifact@v4
         with:
@@ -44,6 +51,7 @@ jobs:
           # Force add data files even if in .gitignore
           git add -f data/rommelmarkten.db
           git add -f data/exports/*.json
+          git add -f data/exports/latest.json
           git diff --staged --quiet || git commit -m "Update rommelmarkt data [skip ci]"
           git push
         env:
